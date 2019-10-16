@@ -1,10 +1,14 @@
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+# This is because the Host is running 1903.
+FROM mcr.microsoft.com/windows:1903
 
 # download.jetbrains.com/idea/ideaIC-2019.2.3.exe
-RUN powershell.exe -Command Invoke-WebRequest -Uri "https://download.jetbrains.com/idea/ideaIC-2019.2.3.exe" -OutFile "C:\ideaIC-2019.2.3.exe"
+ADD https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u222-b10/OpenJDK8U-jdk_x86-32_windows_hotspot_8u222b10.msi C:\OpenJDK8U-jdk_x86-32_windows_hotspot_8u222b10.msi
 
-# Silent IntelliJ arguments are from:
-# intellij-support.jetbrains.com/hc/en-us/articles/206827139-Silent-or-Unattended-installation-on-Windows
+# You could alternatively copy over the .exe
+# COPY example.exe c:\example.exe
+
 # Execute structure from:
 # docs.microsoft.com/en-us/virtualization/windowscontainers/manage-docker/manage-windows-dockerfile#examples-of-using-run-with-windows
-RUN powershell.exe -Command Start-Process c:\ideaIC-2019.2.3.exe -ArgumentList '/S /CONFIG=d:\temp\silent.config /D=W:\Program Files\IntelliJ IDEA 2018' -Wait
+# Silent IntelliJ arguments are from:
+# intellij-support.jetbrains.com/hc/en-us/articles/206827139-Silent-or-Unattended-installation-on-Windows
+RUN msiexec C:\OpenJDK8U-jdk_x86-32_windows_hotspot_8u222b10.msi /quiet /qn /passive
