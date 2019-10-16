@@ -1,1 +1,1 @@
-# windows-installers
+Per https://kevinkle.github.io/exploring-windows-installers/
